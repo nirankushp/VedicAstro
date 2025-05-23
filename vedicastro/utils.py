@@ -128,7 +128,5 @@ def calculate_pada(sidereal_degree: float):
     return int(degree_within_nakshatra / pada_span) + 1
 """
 
-# Save to file
-path = Path("/mnt/data/utils_corrected_with_pada.py")
-path.write_text(utils_code.strip())
+
 path.name
