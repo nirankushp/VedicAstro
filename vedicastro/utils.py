@@ -1,7 +1,3 @@
-# Final attempt with corrected syntax and full utils content
-from pathlib import Path
-
-utils_code = """
 import pytz
 from timezonefinder import TimezoneFinder
 from datetime import datetime, date, timedelta
@@ -127,6 +123,3 @@ def calculate_pada(sidereal_degree: float):
     pada_span = nakshatra_deg / 4  # 3.3333° per pada
     return int(degree_within_nakshatra / pada_span) + 1
 """
-
-
-path.name
