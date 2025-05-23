@@ -1,11 +1,13 @@
+# Final attempt with corrected syntax and full utils content
+from pathlib import Path
+
+utils_code = """
 import pytz
 from timezonefinder import TimezoneFinder
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
-## 
 def clean_select_objects_split_str(input_str):
-    """Rename and Clean certain chart objects like North, South Node and Fortuna"""
     cleaned_str = (input_str.strip('<').strip('>')
                           .replace("North Node", "Rahu")
                           .replace("South Node", "Ketu")
@@ -17,7 +19,6 @@ def utc_offset_str_to_float(utc_offset: str) -> float:
     return hours + minutes / 60.0 if utc_offset.startswith('+') else -1 * (abs(hours) + minutes / 60.0)
 
 def pretty_data_table(named_tuple_data : list):
-    """Converts a list of NamedTuple Collections to a PrettyTable"""
     from prettytable import PrettyTable
     table = PrettyTable()
     table.field_names = named_tuple_data[0]._fields 
@@ -94,9 +95,6 @@ def compute_new_date(start_date : tuple, diff_value : float, direction: str):
     return new_date
 
 def get_utc_offset(timezone_loc: str, date: datetime):
-    """
-    Returns the UTC offset as a timedelta for a given timezone name or offset string (like '+05:30').
-    """
     from pytz import timezone, FixedOffset, UnknownTimeZoneError
 
     try:
@@ -115,7 +113,22 @@ def get_utc_offset(timezone_loc: str, date: datetime):
     hours, remainder = divmod(abs(utc_offset_sec), 3600)
     minutes = remainder // 60
     sign = "+" if utc_offset_sec >= 0 else "-"
-    utc_offset_str = f"{sign}{int(hours):02}:{int(minutes):02}"
+    utc_offset_str = f"{sign}{int(hours):02}:{int(minutes):02}"    
     utc_offset = timedelta(seconds=utc_offset_sec)
 
     return utc_offset_str, utc_offset
+
+def calculate_pada(sidereal_degree: float):
+    \"\"\"Calculates the pada (1–4) based on sidereal degree, anchored to the start of each nakshatra.\"\"\"
+    nakshatra_deg = 13 + 1/3  # 13.3333°
+    nakshatra_index = int(sidereal_degree / nakshatra_deg)
+    nakshatra_start = nakshatra_index * nakshatra_deg
+    degree_within_nakshatra = sidereal_degree - nakshatra_start
+    pada_span = nakshatra_deg / 4  # 3.3333° per pada
+    return int(degree_within_nakshatra / pada_span) + 1
+"""
+
+# Save to file
+path = Path("/mnt/data/utils_corrected_with_pada.py")
+path.write_text(utils_code.strip())
+path.name
