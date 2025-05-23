@@ -115,7 +115,7 @@ def get_utc_offset(timezone_loc: str, date: datetime):
     return utc_offset_str, utc_offset
 
 def calculate_pada(sidereal_degree: float):
-   """Calculates the pada (1–4) based on sidereal degree, anchored to the start of each nakshatra."""
+"""Calculates the pada (1–4) based on sidereal degree, anchored to the start of each nakshatra."""
     nakshatra_deg = 13 + 1/3  # 13.3333°
     nakshatra_index = int(sidereal_degree / nakshatra_deg)
     nakshatra_start = nakshatra_index * nakshatra_deg
@@ -123,3 +123,4 @@ def calculate_pada(sidereal_degree: float):
     pada_span = nakshatra_deg / 4  # 3.3333° per pada
     return int(degree_within_nakshatra / pada_span) + 1
 """
+
