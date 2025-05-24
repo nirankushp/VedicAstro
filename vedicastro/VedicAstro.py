@@ -256,10 +256,12 @@ class VedicHoroscopeData:
         sign_index = int(sign_deg // 30)  # Each zodiac sign is 30 degrees
         
         # Compute Nakshatra details
-        nakshatra_deg = sign_deg % 13.332  # Each nakshatra is 13.332 degrees
+        
         nakshatra_index = int(sign_deg // 13.332)  # Find the nakshatra index
         sidereal_deg = deg  # deg is already the full sidereal longitude
-        pada = calculate_pada_from_zodiac(sidereal_deg)
+        
+pada = calculate_pada_from_zodiac(deg)
+
 
         
 
