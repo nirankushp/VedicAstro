@@ -445,6 +445,9 @@ class VedicHoroscopeData:
         return PlanetsDataCollection(**data_dict)
 
     def get_rl_nl_sl_data(self, deg: float):
+        import os
+        print(">>> USING FILE:", os.path.abspath(__file__))
+
         """
         Returns the Rashi (Sign) Lord, Nakshatra, Nakshatra Pada, Nakshatra Lord,
         Sub Lord, and Sub Sub Lord corresponding to the given sidereal degree.
