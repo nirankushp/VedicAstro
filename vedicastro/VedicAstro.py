@@ -3,6 +3,9 @@ from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
 from flatlib.datetime import Datetime, Date
 from flatlib.object import GenericObject
+from .utils import *
+from .calculate_pada_from_zodiac_patch import calculate_pada_from_zodiac
+
 
 import collections
 import polars as pl
@@ -256,8 +259,7 @@ class VedicHoroscopeData:
         # Compute Nakshatra details
         nakshatra_deg = sign_deg % 13.332  # Each nakshatra is 13.332 degrees
         nakshatra_index = int(sign_deg // 13.332)  # Find the nakshatra index
-       from .calculate_pada_from_zodiac_patch import calculate_pada_from_zodiac
-          pada = calculate_pada_from_zodiac(sign_deg)
+        pada = calculate_pada_from_zodiac(sign_deg)
 
 
         # Ensure nakshatra_index is within bounds
