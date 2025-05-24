@@ -463,12 +463,16 @@ class VedicHoroscopeData:
         ]
         star_lords = lords * 3  # for 27 nakshatras
 
-        sidereal_deg = deg % 360  # normalize if needed
+        sidereal_deg = deg % 360
         sign_index = int(sidereal_deg // 30)
         nakshatra_index = int(sidereal_deg // 13.3333) % 27
         pada = calculate_pada_from_zodiac(sidereal_deg)
 
-        # Sub-lord logic using remainder-based method
+        print(">>> DEBUG: DEG =", deg)
+        print(">>> DEBUG: Sidereal DEG =", sidereal_deg)
+        print(">>> DEBUG: Nakshatra =", NAKSHATRAS[nakshatra_index])
+        print(">>> DEBUG: Pada =", pada)
+
         deg_mod = sidereal_deg % 120
         degcum = 0
         i = 0
@@ -483,7 +487,7 @@ class VedicHoroscopeData:
                     deg_ss = deg_sl * duration[k] / 120
                     degcum += deg_ss
                     if degcum >= deg_mod:
-                        return {
+                        result = {
                             "Nakshatra": NAKSHATRAS[nakshatra_index],
                             "Pada": pada,
                             "NakshatraLord": star_lords[nakshatra_index],
@@ -491,6 +495,8 @@ class VedicHoroscopeData:
                             "SubLord": lords[j],
                             "SubSubLord": lords[k],
                         }
+                        print(">>> DEBUG: RETURN =", result)
+                        return result
                     k = (k + 1) % 9
                     if k == j:
                         break
