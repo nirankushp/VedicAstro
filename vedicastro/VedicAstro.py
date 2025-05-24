@@ -256,7 +256,9 @@ class VedicHoroscopeData:
         # Compute Nakshatra details
         nakshatra_deg = sign_deg % 13.332  # Each nakshatra is 13.332 degrees
         nakshatra_index = int(sign_deg // 13.332)  # Find the nakshatra index
-        pada = int((nakshatra_deg % 13.332) // 3.325) + 1  # Each pada is 3.325 degrees
+       from .calculate_pada_from_zodiac_patch import calculate_pada_from_zodiac
+          pada = calculate_pada_from_zodiac(sign_deg)
+
 
         # Ensure nakshatra_index is within bounds
         nakshatra_index = nakshatra_index % len(NAKSHATRAS)        
