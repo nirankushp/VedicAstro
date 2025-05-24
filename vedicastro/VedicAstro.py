@@ -260,7 +260,7 @@ class VedicHoroscopeData:
         nakshatra_index = int(sign_deg // 13.332)  # Find the nakshatra index
         sidereal_deg = deg  # deg is already the full sidereal longitude
         
-pada = calculate_pada_from_zodiac(deg)
+        pada = calculate_pada_from_zodiac(deg)
 
 
         
