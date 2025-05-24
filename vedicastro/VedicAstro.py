@@ -4,8 +4,7 @@ from flatlib.geopos import GeoPos
 from flatlib.datetime import Datetime, Date
 from flatlib.object import GenericObject
 from .utils import *
-from .calculate_pada_from_zodiac_patch import calculate_pada_from_zodiac
-
+from .utils import calculate_pada_from_zodiac
 
 import collections
 import polars as pl
