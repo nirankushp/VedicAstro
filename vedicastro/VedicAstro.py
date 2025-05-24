@@ -240,54 +240,51 @@ class VedicHoroscopeData:
         # Return a new PlanetsDataCollection instance with the data
         return PlanetsDataCollection(**data_dict)
 
-       def get_rl_nl_sl_data(self, deg: float):
-    """
-    Returns the Rashi (Sign) Lord, Nakshatra, Nakshatra Pada, Nakshatra Lord,
-    Sub Lord, and Sub Sub Lord corresponding to the given sidereal degree.
-    """
-    duration = [7, 20, 6, 10, 7, 18, 16, 19, 17]
-    lords = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-    star_lords = lords * 3  # for 27 nakshatras
-
-    # sidereal_deg is full sidereal longitude (0 to 360)
-    sidereal_deg = deg % 360
-    sign_index = int(sidereal_deg // 30)
-    nakshatra_index = int(sidereal_deg // 13.3333)
-    nakshatra_index = nakshatra_index % len(NAKSHATRAS)
-    pada = calculate_pada_from_zodiac(sidereal_deg)
-
-    # Sub-lord logic
-    deg_mod = sidereal_deg - 120 * int(sidereal_deg / 120)
-    degcum = 0
-    i = 0
-
-    while i < 9:
-        deg_nl = 360 / 27
-        j = i
-        while True:
-            deg_sl = deg_nl * duration[j] / 120
-            k = j
-            while True:
-                deg_ss = deg_sl * duration[k] / 120
-                degcum += deg_ss
-                if degcum >= deg_mod:
-                    return {
-                        "Nakshatra": NAKSHATRAS[nakshatra_index],
-                        "Pada": pada,
-                        "NakshatraLord": star_lords[nakshatra_index],
-                        "RasiLord": SIGN_LORDS[sign_index],
-                        "SubLord": lords[j],
-                        "SubSubLord": lords[k]
-                    }
-                k = (k + 1) % 9
-                if k == j:
-                    break
-            j = (j + 1) % 9
-            if j == i:
-                break
-        i += 1
-
-
+    def get_rl_nl_sl_data(self, deg: float):
+              """
+              Returns the Rashi (Sign) Lord, Nakshatra, Nakshatra Pada, Nakshatra Lord,
+              Sub Lord, and Sub Sub Lord corresponding to the given sidereal degree.
+              """
+              duration = [7, 20, 6, 10, 7, 18, 16, 19, 17]
+              lords = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+              star_lords = lords * 3  # for 27 nakshatras
+          
+              sidereal_deg = deg % 360  # normalize if needed
+              sign_index = int(sidereal_deg // 30)
+              nakshatra_index = int(sidereal_deg // 13.3333) % 27
+              pada = calculate_pada_from_zodiac(sidereal_deg)
+          
+              # Sub-lord logic using remainder-based method
+              deg_mod = sidereal_deg % 120
+              degcum = 0
+              i = 0
+          
+              while i < 9:
+                  deg_nl = 360 / 27
+                  j = i
+                  while True:
+                      deg_sl = deg_nl * duration[j] / 120
+                      k = j
+                      while True:
+                          deg_ss = deg_sl * duration[k] / 120
+                          degcum += deg_ss
+                          if degcum >= deg_mod:
+                              return {
+                                  "Nakshatra": NAKSHATRAS[nakshatra_index],
+                                  "Pada": pada,
+                                  "NakshatraLord": star_lords[nakshatra_index],
+                                  "RasiLord": SIGN_LORDS[sign_index],
+                                  "SubLord": lords[j],
+                                  "SubSubLord": lords[k]
+                              }
+                          k = (k + 1) % 9
+                          if k == j:
+                              break
+                      j = (j + 1) % 9
+                      if j == i:
+                          break
+                  i += 1
+	    
     def get_transit_details(self):
         """
         Captures the rl_nl_sl transit data for all planets at the current chart time.
