@@ -62,7 +62,8 @@ async def get_chart_data(input: ChartInput):
                                               input.utc,
                                               input.ayanamsa, input.house_system)
     chart = horoscope.generate_chart()
-    
+
+    # Main chart data
     planets_data = horoscope.get_planets_data_from_chart(chart)
     houses_data = horoscope.get_houses_data_from_chart(chart)
     planet_significators = horoscope.get_planet_wise_significators(planets_data, houses_data)
@@ -73,6 +74,17 @@ async def get_chart_data(input: ChartInput):
                                                                     houses_data=houses_data,
                                                                     return_style = input.return_style)
 
+    # ✅ DEBUG OUTPUTS from get_rl_nl_sl_data()
+    debug_rl_nl_sl = []
+    for planet in chart.objects:
+        deg = planet.lon
+        result = horoscope.get_rl_nl_sl_data(deg=deg)
+        debug_rl_nl_sl.append({
+            "Object": planet.id,
+            "Degree": round(deg, 4),
+            "rl_nl_sl_result": result
+        })
+
     return {
         "planets_data": [planet._asdict() for planet in planets_data],
         "houses_data": [house._asdict() for house in houses_data],
@@ -80,8 +92,10 @@ async def get_chart_data(input: ChartInput):
         "planetary_aspects": planetary_aspects,
         "house_significators": house_significators,
         "vimshottari_dasa_table": vimshottari_dasa_table,
-        "consolidated_chart_data": consolidated_chart_data
+        "consolidated_chart_data": consolidated_chart_data,
+        "debug_rl_nl_sl": debug_rl_nl_sl  # ← 🧠 added debug output for validation
     }
+
 
 @app.post("/get_all_horary_data")
 async def get_horary_data(input: HoraryChartInput):
