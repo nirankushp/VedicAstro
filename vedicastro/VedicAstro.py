@@ -338,7 +338,9 @@ class VedicHoroscopeData:
                     lon_diff = round(lon_diff, 3)
 
                     # Check if lon_diff is a multiple of 15 degrees with a small tolerance
-                    if abs(lon_diff % 15) == 0.0:
+                    mod_diff = lon_diff % 15
+                    tolerance = 0.1
+                    if mod_diff <= tolerance or abs(mod_diff - 15) <= tolerance:
 
                         aspects_dict.append(
                             {
