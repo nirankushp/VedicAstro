@@ -25,8 +25,3 @@ setup(
     dependency_links=["git+https://github.com/diliprk/flatlib.git@sidereal#egg=flatlib"]
 )
 
-print("IMPORTANT NOTE: PyPI no longer supports specifying external packages in `install_requires`")
-print("Packages specified in `dependency_links` will also not get automatically installed")
-print("To install the required package 'flatlib' from the 'sidereal' branch, run the following command \
-      after completion of `pip install vedicastro` process:")
-print("pip install git+https://github.com/diliprk/flatlib.git@sidereal#egg=flatlib")
