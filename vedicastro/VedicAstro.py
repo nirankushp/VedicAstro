@@ -1,7 +1,7 @@
 from flatlib import const, aspects
 from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
-from flatlib.datetime import Datetime, Date
+from flatlib.datetime import Datetime
 from flatlib.object import GenericObject
 from .utils import (
     clean_select_objects_split_str,
