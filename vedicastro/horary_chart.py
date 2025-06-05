@@ -1,9 +1,12 @@
 import os
+import logging
 import polars as pl
 import swisseph as swe
 from datetime import datetime
 from .utils import dms_to_decdeg, utc_offset_str_to_float
 from .VedicAstro import VedicHoroscopeData
+
+logger = logging.getLogger(__name__)
 
 ## Global Constants
 SWE_AYANAMAS = { "Krishnamurti" : swe.SIDM_KRISHNAMURTI, "Krishnamurti_Senthilathiban": swe.SIDM_KRISHNAMURTI_VP291}
@@ -124,25 +127,7 @@ def find_exact_ascendant_time(year: int, month: int, day: int, utc_offset: str, 
         current_time += 1.0 / (24 * 60 * 60 * inc_factor)  # Adjust time increment based on the factor
         counter += 1
 
-    print("No matching Ascendant time found for the given input")
+    logger.info("No matching Ascendant time found for the given input")
     return None
 
 
-if __name__== "__main__":
-    year = 2024
-    month = 2
-    day = 5
-    hour = 9
-    minute = 5
-    secs = 0
-    horary_number = 34
-    latitude, longitude, utc = 11.020085773931049, 76.98319647719487, "+5:30" ## Coimbatore
-    ayan = "Krishnamurti"
-    horary_asc = get_horary_ascendant_degree(horary_number) 
-    horary_asc_deg = horary_asc["ZodiacDegreeLocation"]
-    req_sublord = horary_asc["SubLord"]   
-    matched_time, houses_chart, houses_data = find_exact_ascendant_time(year, month, day, utc, latitude, longitude, horary_number, ayan)
-    asc = houses_data[0]
-    final_sublord = asc.SubLord
-    final_asc_deg = asc.LonDecDeg
-    print(pl.DataFrame(houses_data))
