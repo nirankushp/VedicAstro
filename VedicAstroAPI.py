@@ -1,7 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
 from fastapi import FastAPI
-from concurrent.futures import ThreadPoolExecutor
 from fastapi.middleware.cors import CORSMiddleware
 from vedicastro import VedicAstro, horary_chart, utils
 

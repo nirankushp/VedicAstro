@@ -1,7 +1,7 @@
 from flatlib import const, aspects
 from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
-from flatlib.datetime import Datetime, Date
+from flatlib.datetime import Datetime
 from flatlib.object import GenericObject
 from .utils import *
 from .utils import calculate_pada_from_zodiac
