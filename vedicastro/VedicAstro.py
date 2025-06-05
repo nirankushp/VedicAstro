@@ -7,9 +7,11 @@ from .utils import *
 from .utils import calculate_pada_from_zodiac
 
 import collections
+import logging
 import polars as pl
 from .utils import *
 
+logger = logging.getLogger(__name__)
 
 ## GLOBAL VARS
 RASHIS = [
@@ -447,8 +449,7 @@ class VedicHoroscopeData:
         return PlanetsDataCollection(**data_dict)
 
     def get_rl_nl_sl_data(self, deg: float):
-        import os
-        print(">>> USING FILE:", os.path.abspath(__file__))
+        logger.debug("Using file: %s", __file__)
 
         """
         Returns the Rashi (Sign) Lord, Nakshatra, Nakshatra Pada, Nakshatra Lord,
@@ -473,10 +474,10 @@ class VedicHoroscopeData:
         nakshatra_index = int(sidereal_deg // 13.3333) % 27
         pada = calculate_pada_from_zodiac(sidereal_deg)
 
-        print(">>> DEBUG: DEG =", deg)
-        print(">>> DEBUG: Sidereal DEG =", sidereal_deg)
-        print(">>> DEBUG: Nakshatra =", NAKSHATRAS[nakshatra_index])
-        print(">>> DEBUG: Pada =", pada)
+        logger.debug("DEG = %s", deg)
+        logger.debug("Sidereal DEG = %s", sidereal_deg)
+        logger.debug("Nakshatra = %s", NAKSHATRAS[nakshatra_index])
+        logger.debug("Pada = %s", pada)
 
         deg_mod = sidereal_deg % 120
         degcum = 0
@@ -500,7 +501,7 @@ class VedicHoroscopeData:
                             "SubLord": lords[j],
                             "SubSubLord": lords[k],
                         }
-                        print(">>> DEBUG: RETURN =", result)
+                        logger.debug("RETURN = %s", result)
                         return result
                     k = (k + 1) % 9
                     if k == j:
