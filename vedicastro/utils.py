@@ -57,27 +57,61 @@ def dms_difference(dms1_str: str, dms2_str: str):
     diff_seconds = abs(dms1_seconds - dms2_seconds)
     return seconds_to_dms(diff_seconds)
 
-def convert_years_ymdhm(years):
-    months_per_year = 12
-    days_per_month = 30
-    hours_per_day = 24
-    minutes_per_hour = 60
+import calendar
+
+
+def convert_years_ymdhm(years, start_date):
+    """Convert fractional years to year, month, day, hour and minute components.
+
+    Parameters
+    ----------
+    years : float
+        Duration in years. Fractions are converted using actual calendar month
+        lengths from ``start_date``.
+    start_date : tuple
+        Tuple of ``(year, month, day, hour, minute)`` representing the starting
+        date used to resolve month lengths and leap years.
+
+    Returns
+    -------
+    tuple
+        ``(years, months, days, hours, minutes)`` suitable for building a
+        ``relativedelta``.
+    """
+
+    year, month, day, hour, minute = start_date
+    base_date = datetime(year, month, day, hour, minute)
 
     whole_years = int(years)
-    months = (years - whole_years) * months_per_year
-    whole_months = int(months)
-    days = (months - whole_months) * days_per_month
-    whole_days = int(days)
-    hours = (days - whole_days) * hours_per_day
-    whole_hours = int(hours)
-    minutes = (hours - whole_hours) * minutes_per_hour
-    whole_minutes = int(minutes)
+    date_after_years = base_date + relativedelta(years=whole_years)
+
+    remaining_years = years - whole_years
+    months_total = remaining_years * 12
+    whole_months = int(months_total)
+    date_after_months = date_after_years + relativedelta(months=whole_months)
+
+    remaining_month_fraction = months_total - whole_months
+    days_in_month = calendar.monthrange(date_after_months.year,
+                                        date_after_months.month)[1]
+    days_total = remaining_month_fraction * days_in_month
+    whole_days = int(days_total)
+    date_after_days = date_after_months + relativedelta(days=whole_days)
+
+    remaining_day_fraction = days_total - whole_days
+    hours_total = remaining_day_fraction * 24
+    whole_hours = int(hours_total)
+    date_after_hours = date_after_days + relativedelta(hours=whole_hours)
+
+    remaining_hour_fraction = hours_total - whole_hours
+    minutes_total = remaining_hour_fraction * 60
+    whole_minutes = int(minutes_total)
 
     return whole_years, whole_months, whole_days, whole_hours, whole_minutes
 
 def compute_new_date(start_date : tuple, diff_value : float, direction: str):
     year, month, day, hour, minute = start_date
-    years, months, days, hours, minutes = convert_years_ymdhm(diff_value)
+    years, months, days, hours, minutes = convert_years_ymdhm(diff_value,
+                                                              start_date)
     initial_date = datetime(year, month, day, hour, minute)
     time_difference = relativedelta(years=years, months=months, days=days, hours=hours, minutes=minutes)
 
