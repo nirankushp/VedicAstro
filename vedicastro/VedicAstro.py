@@ -3,12 +3,16 @@ from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
 from flatlib.datetime import Datetime, Date
 from flatlib.object import GenericObject
-from .utils import *
-from .utils import calculate_pada_from_zodiac
+from .utils import (
+    clean_select_objects_split_str,
+    dms_to_decdeg,
+    get_utc_offset,
+    compute_new_date,
+    calculate_pada_from_zodiac,
+)
 
 import collections
 import polars as pl
-from .utils import *
 
 
 ## GLOBAL VARS
