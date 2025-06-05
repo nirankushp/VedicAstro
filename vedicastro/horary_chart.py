@@ -19,8 +19,8 @@ KP_SL_DMS_DATA = pl.read_csv(csv_file_path)
 KP_SL_DMS_DATA = KP_SL_DMS_DATA\
                 .with_columns(pl.arange(1, KP_SL_DMS_DATA.height + 1).alias("SL_Div_Nr"))\
                 .with_columns([
-                    pl.col('From_DMS').map_elements(dms_to_decdeg).alias('From_DecDeg'),
-                    pl.col('To_DMS').map_elements(dms_to_decdeg).alias('To_DecDeg'),
+                    pl.col('From_DMS').map_elements(dms_to_decdeg, return_dtype=pl.Float64).alias('From_DecDeg'),
+                    pl.col('To_DMS').map_elements(dms_to_decdeg, return_dtype=pl.Float64).alias('To_DecDeg'),
                     pl.col("From_DMS").str.replace_all(":", "").cast(pl.Int32).alias("From_DMS_int"),
                     pl.col("To_DMS").str.replace_all(":", "").cast(pl.Int32).alias("To_DMS_int")
                 ])
