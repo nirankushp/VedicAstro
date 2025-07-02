@@ -131,3 +131,58 @@ def find_exact_ascendant_time(year: int, month: int, day: int, utc_offset: str, 
     return None
 
 
+
+def generate_basic_kp_chart(horary_number: int, year: int, month: int, day: int,
+                             utc_offset: str, lat: float, lon: float,
+                             ayanamsa: str = "Krishnamurti",
+                             house_system: str = "Placidus") -> dict:
+    """Generate basic KP chart data for a given horary number.
+
+    This uses the KP horary method to find the exact ascendant time matching
+    the requested sublord and then constructs planetary and house data using
+    :class:`VedicHoroscopeData`.
+    """
+    result = find_exact_ascendant_time(year, month, day, utc_offset, lat, lon,
+                                       horary_number, ayanamsa)
+    if not result:
+        raise ValueError("No matching ascendant found for the given input")
+
+    matched_time, houses_chart, houses_data = result
+    secs = matched_time.second + matched_time.microsecond / 1_000_000
+    vhd = VedicHoroscopeData(matched_time.year, matched_time.month,
+                             matched_time.day, matched_time.hour,
+                             matched_time.minute, secs, utc_offset, lat, lon,
+                             ayanamsa, house_system)
+
+    planets_chart = vhd.generate_chart()
+    planets_data = vhd.get_planets_data_from_chart(planets_chart, houses_chart)
+
+    return {
+        "matched_time": matched_time.isoformat(),
+        "ascendant_degree": houses_data[0].LonDecDeg,
+        "houses_data": [house._asdict() for house in houses_data],
+        "planets_data": [planet._asdict() for planet in planets_data],
+    }
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate KP horary chart")
+    parser.add_argument("horary_number", type=int, help="Horary number 1-249")
+    parser.add_argument("year", type=int)
+    parser.add_argument("month", type=int)
+    parser.add_argument("day", type=int)
+    parser.add_argument("utc_offset", type=str)
+    parser.add_argument("latitude", type=float)
+    parser.add_argument("longitude", type=float)
+    parser.add_argument("--ayanamsa", default="Krishnamurti")
+    parser.add_argument("--house_system", default="Placidus")
+    args = parser.parse_args()
+
+    chart = generate_basic_kp_chart(
+        args.horary_number, args.year, args.month, args.day,
+        args.utc_offset, args.latitude, args.longitude,
+        args.ayanamsa, args.house_system,
+    )
+    import pprint
+    pprint.pprint(chart)

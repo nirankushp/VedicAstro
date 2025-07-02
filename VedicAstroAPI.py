@@ -126,3 +126,20 @@ async def get_horary_data(input: HoraryChartInput):
         "vimshottari_dasa_table": vimshottari_dasa_table,
         "consolidated_chart_data": consolidated_chart_data
     }
+
+
+@app.post("/get_kp_chart_by_horary")
+async def get_kp_chart(input: HoraryChartInput):
+    """Return basic KP chart data for a supplied horary number."""
+    result = horary_chart.generate_basic_kp_chart(
+        horary_number=input.horary_number,
+        year=input.year,
+        month=input.month,
+        day=input.day,
+        utc_offset=input.utc,
+        lat=input.latitude,
+        lon=input.longitude,
+        ayanamsa=input.ayanamsa,
+        house_system=input.house_system,
+    )
+    return result
