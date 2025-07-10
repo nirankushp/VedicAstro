@@ -17,7 +17,7 @@ class ChartInput(BaseModel):
     latitude: float
     longitude: float
     ayanamsa: str = "Lahiri"
-    house_system: str = "Equal"
+    house_system: str = "Placidus"
     return_style: Optional[str] = None
 
 class HoraryChartInput(BaseModel):
