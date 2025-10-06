@@ -130,13 +130,37 @@ def get_utc_offset(timezone_loc: str, date: datetime):
     try:
         tz = timezone(timezone_loc)
     except UnknownTimeZoneError:
-        if ":" in timezone_loc:
-            sign = 1 if timezone_loc[0] != "-" else -1
-            hrs, mins = map(int, timezone_loc.strip("+").strip("-").split(":"))
+        cleaned_loc = timezone_loc.strip()
+
+        # Handle strings that include common prefixes such as ``UTC`` or ``GMT``
+        for prefix in ("UTC", "GMT"):
+            if cleaned_loc.upper().startswith(prefix):
+                cleaned_loc = cleaned_loc[len(prefix):]
+                break
+
+        cleaned_loc = cleaned_loc.strip()
+
+        if not cleaned_loc:
+            tz = FixedOffset(0)
+        else:
+            if ":" in cleaned_loc:
+                sign = 1 if cleaned_loc[0] != "-" else -1
+                hrs, mins = map(int, cleaned_loc.strip("+").strip("-").split(":"))
+            else:
+                sign = 1
+                offset_str = cleaned_loc
+                if cleaned_loc[0] in "+-":
+                    sign = 1 if cleaned_loc[0] == "+" else -1
+                    offset_str = cleaned_loc[1:]
+
+                if not offset_str.isdigit():
+                    raise
+
+                hrs = int(offset_str)
+                mins = 0
+
             offset_minutes = sign * (hrs * 60 + mins)
             tz = FixedOffset(offset_minutes)
-        else:
-            raise
 
     localized_date = tz.localize(date)
     utc_offset_sec = localized_date.utcoffset().total_seconds()
