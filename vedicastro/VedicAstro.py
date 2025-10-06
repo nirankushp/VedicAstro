@@ -712,11 +712,11 @@ class VedicHoroscopeData:
         # Group by 'Rasi' and aggregate all columns into a list or first non-null value
         result_df = df_concat.group_by("Rasi").agg(
             [
-                pl.col("Object").list().alias("Object"),
-                pl.col("isRetroGrade").list().alias("isRetroGrade"),
-                pl.col("LonDecDeg").list().alias("LonDecDeg"),
-                pl.col("SignLonDMS").list().alias("SignLonDMS"),
-                pl.col("SignLonDecDeg").list().alias("SignLonDecDeg"),
+                pl.col("Object").implode().alias("Object"),
+                pl.col("isRetroGrade").implode().alias("isRetroGrade"),
+                pl.col("LonDecDeg").implode().alias("LonDecDeg"),
+                pl.col("SignLonDMS").implode().alias("SignLonDMS"),
+                pl.col("SignLonDecDeg").implode().alias("SignLonDecDeg"),
                 # pl.col('LatDMS').list().alias('LatDMS')
             ]
         )
