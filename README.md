@@ -74,6 +74,20 @@ Thereafter, you can test the API service at `http://127.0.0.1:8088/docs` in your
 ## Front-End Companion Project
 If you are looking a front end project to visualize the results of the `VedicAstroAPI` call, please check out https://github.com/diliprk/AstroVue
 
+## KP Sublord Analysis Example
+The API now defaults to the **Placidus** house system. Use the helper class
+`HouseSignificatorEngine` to inspect cusp sub-lords directly from API data.
+
+```python
+from vedicastro.house_sublord_engine import HouseSignificatorEngine
+
+engine = HouseSignificatorEngine("Placidus", "horary", api_data)
+result = engine.analyze_sublords()
+```
+
+This logs the sub-lords for the 1st, 6th and 10th cusps and keeps the Moon's
+sub-lord separate for reference.
+
 ## Dedicatations
 This package is a dedication to the following great personalities, following in their footsteps:
 - [Parasara MahaRishi](https://en.wikipedia.org/wiki/Parashara)
